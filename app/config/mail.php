@@ -1,5 +1,15 @@
 <?php
 
+// Use Mandrill
+return array(
+	'driver'=> 'smtp',
+	'host'=> 'smtp.mandrillapp.com',
+	'port'=> 587,
+	'username'=> 'iamdmachinist@gmail.com',
+	'password'=> 'VvAE8EIB9OXpOhYMpBRhyw',
+	'from' => array('address' => 'iamdmachinist@gmail.com', 'name' => 'Gora Support'),
+);
+
 return array(
 
 	/*
