@@ -25,7 +25,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'gora',
 			'username'  => 'root',
-			'password'  => '',
+			'password'  => 'ouOvmWSCZC',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

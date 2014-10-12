@@ -13,8 +13,8 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
-	'url' => 'http://dev.gora',
+	'url' => 'http://128.199.220.115',
 
 );
