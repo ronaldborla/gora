@@ -12,3 +12,5 @@
 */
 
 Route::get('/', 'HomeController@home');
+
+Route::get('/import/tripadvisor', 'ImportController@tripadvisor');
