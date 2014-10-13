@@ -68,12 +68,16 @@ class ImportController extends BaseController {
     }
     // Set price multiplier
     $multiplier = (App::environment() == 'live') ? 35 : 1;
+    // Get address
+    $addressHTML = '<div>'.static::between($html, '<address>', '</address>').'</div>';
+    // Dom
+    $addressDOM = str_get_dom($addressHTML);
     // If there's HTML, get individual contents
     $establishment = array(
       // Get name
       'name'=> static::between($html, '<div class="warLocName">', '</div>'),
       // Get address
-      'address'=> str_replace(' |', ',', static::between($html, '<div class="addr">', '</div>')),
+      'address'=> trim(str_replace(' |', ',', $addressDOM->getPlainTextUTF8())),
       // Set latLng
       'lat'=> isset($latLng[1]) ? $latLng[0] : 0,
       'lng'=> isset($latLng[1]) ? $latLng[1] : 0,
