@@ -27,7 +27,7 @@ class ImportController extends BaseController {
       // Get info
       $info = $this->extractTripAdvisor($url);
       // Dump
-      var_dump($info);
+      echo '<pre>',print_r($info, true),'</pre>';
     }
   }
 
