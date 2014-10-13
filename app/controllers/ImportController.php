@@ -48,6 +48,9 @@ class ImportController extends BaseController {
     if (strpos($html, '<b>Price range:</b>') !== false) {
       // Get price range
       $priceRange = static::between($html, '<b>Price range:</b>', '</div>');
+
+      echo $priceRange;
+
       // If there's price range
       if ($priceRange) {
         // Get what's in span
