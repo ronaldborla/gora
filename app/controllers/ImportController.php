@@ -48,9 +48,6 @@ class ImportController extends BaseController {
     if (strpos($html, '<b>Price range:</b>') !== false) {
       // Get price range
       $priceRange = static::between($html, '<b>Price range:</b>', '</div>');
-
-      echo $priceRange;
-
       // If there's price range
       if ($priceRange) {
         // Get what's in span
@@ -69,6 +66,8 @@ class ImportController extends BaseController {
         }
       }
     }
+    // Set price multiplier
+    $multiplier = (App::environment() == 'live') ? 35 : 1;
     // If there's HTML, get individual contents
     $establishment = array(
       // Get name
@@ -79,8 +78,8 @@ class ImportController extends BaseController {
       'lat'=> isset($latLng[1]) ? $latLng[0] : 0,
       'lng'=> isset($latLng[1]) ? $latLng[1] : 0,
       // Set price range
-      'price_min'=> $priceMin,
-      'price_max'=> $priceMax
+      'price_min'=> round($priceMin * $multiplier, -2),
+      'price_max'=> round($priceMax * $multiplier, -2)
     );
     // Set categories
     $categories = array();
