@@ -14,3 +14,9 @@
 Route::get('/', 'HomeController@home');
 
 Route::get('/import/tripadvisor', 'ImportController@tripadvisor');
+
+// Test mod rewrite
+Route::get('/test', function() {
+
+  phpinfo();
+});
