@@ -14,21 +14,120 @@ class ImportController extends BaseController {
 
     // Get url
     $url = trim(Input::get('url'));
+    // Set info
+    $info = array();
+    // Set imported
+    $imported = null;
+    // If there's URL
+    if ($url) {
+      // Get info
+      $info = $this->extractTripAdvisor($url);
+
+      // If import is set
+      if (Input::get('import') == '1') {
+        // Do import
+        $imported = $this->importEstablishment($info);
+      }
+    }
 
     ?>
     <form method="get" action="<?php action('ImportController@tripadvisor'); ?>">
       <input type="text" name="url" value="<?php echo e($url); ?>" />
-      <button type="submit">Load</button>
+      <button type="submit">Load</button><?php
+      // If there's url
+      if ($url) {
+      ?>
+
+      <button type="submit" name="import" value="1">Import</button><?php
+      }
+      ?>
+
     </form>
     <?php
 
     // If there's URL
     if ($url) {
-      // Get info
-      $info = $this->extractTripAdvisor($url);
+      // If imported
+      if ($imported) {
+        // Message
+        echo '<div style="color: #006600;"><em>Establishment successfully imported!</em></div>';
+      } else {
+        // Find
+        $findEstablishment = Establishment::where('name', '=', trim($info['establishment']['name']))->limit(1)->first();
+        // If found
+        if ($findEstablishment && $findEstablishment->id) {
+          // Already exists
+          echo '<div style="color: #aa0000;"><em>Establishment already exists!</em></div>';
+        }
+      }
       // Dump
       echo '<pre>',print_r($info, true),'</pre>';
     }
+  }
+
+  /**
+   * Import restaurant
+   */
+  function importEstablishment($info) {
+    // Create new establishment
+    $establishment = new Establishment($info['establishment']);
+    // Save
+    $establishment->save();
+
+    // Find restaurant category
+    $restaurant = Category::where('name', '=', 'restaurant')->limit(1)->first();
+    // Get id
+    $restaurantId = ($restaurant && $restaurant->id) ? $restaurant->id : 0;
+
+    // If there are categories
+    if (isset($info['categories']) && $info['categories']) {
+      // Set categories
+      $categories = array();
+      // Loop through each
+      foreach ($info['categories'] as $category) {
+        // Append to categories
+        $categories[] = Category::createNew(array(
+          // Set category name
+          'name'=> Str::lower($category)
+        ), $restaurantId);
+      }
+      // Update categories
+      $establishment->updateCategories($categories);
+    }
+
+    // If there are contacts
+    if (isset($info['contacts']) && $info['contacts']) {
+      // Contact order
+      $contactOrder = 0;
+      // Loop through each
+      foreach ($info['contacts'] as $type=> $contact) {
+        // Loop through each
+        foreach ($contact as $value) {
+
+          // Create contact
+          $newContact = new Contact(array(
+            // Set type
+            'type'=> array_search($type, Contact::getTypes()),
+            // Set value
+            'value'=> $value,
+            // Set order
+            'order'=> $contactOrder,
+            // Primary
+            'primary'=> (($contactOrder == 0) ? 1 : 0),
+            // Set establishment
+            'establishment_id'=> $establishment->id
+          ));
+          // Save
+          $newContact->save();
+
+          // Increment order
+          $contactOrder++;
+        }
+      }
+    }
+
+    // Return establishment
+    return $establishment;
   }
 
   /**
@@ -154,9 +253,9 @@ class ImportController extends BaseController {
         }
       }
       // If there's mobiles
-      if ($mobiles) $contacts['mobiles'] = $mobiles;
+      if ($mobiles) $contacts['mobile'] = $mobiles;
       // If there's telephones
-      if ($telephones) $contacts['telephones'] = $telephones;
+      if ($telephones) $contacts['telephone'] = $telephones;
     }
     // Email left
     $leftEmail = '\'ta.locationDetail.checkEmailAction\',event,this,\'';
@@ -167,7 +266,7 @@ class ImportController extends BaseController {
       // If there's any
       if ($email) {
         // Add to contacts
-        $contacts['emails'] = array($email);
+        $contacts['email'] = array($email);
       }
     }
     // Return
