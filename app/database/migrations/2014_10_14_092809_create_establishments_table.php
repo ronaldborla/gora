@@ -23,7 +23,7 @@ class CreateEstablishmentsTable extends Migration {
 		  `price_max` int(10) unsigned NOT NULL,
 		  `tags` text COLLATE utf8_unicode_ci NOT NULL,
 		  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		  `updated_at` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 		  `user_id` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
@@ -34,7 +34,7 @@ class CreateEstablishmentsTable extends Migration {
 		  `description` text COLLATE utf8_unicode_ci NOT NULL,
 		  `tags` text COLLATE utf8_unicode_ci NOT NULL,
 		  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		  `updated_at` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 		  `parent` int(10) unsigned NOT NULL,
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
@@ -42,7 +42,7 @@ class CreateEstablishmentsTable extends Migration {
 		DB::statement('CREATE TABLE IF NOT EXISTS `category_list` (
 		  `order` tinyint(3) unsigned NOT NULL,
 		  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		  `updated_at` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 		  `category_id` int(10) unsigned NOT NULL,
 		  `establishment_id` int(10) unsigned NOT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
@@ -55,7 +55,7 @@ class CreateEstablishmentsTable extends Migration {
 		  `order` tinyint(3) unsigned NOT NULL,
 		  `primary` tinyint(3) unsigned NOT NULL,
 		  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		  `updated_at` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 		  `establishment_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
@@ -67,7 +67,7 @@ class CreateEstablishmentsTable extends Migration {
 		  `tags` text COLLATE utf8_unicode_ci NOT NULL,
 		  `order` tinyint(3) unsigned NOT NULL,
 		  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+		  `updated_at` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 		  `establishment_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci');
