@@ -5,6 +5,8 @@
 /app/bootstrap/start.php
 /logs
 /logs/*
+/docs/
+/docs/*
 /vendor
 composer.phar
 composer.lock
