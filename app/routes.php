@@ -13,6 +13,14 @@
 
 Route::get('', 'HomeController@home');
 
+/*
+    mockup
+    author: abz
+*/
+Route::get('mockup/home', function() {
+    return View::make('home');
+});
+
 Route::get('import/tripadvisor', 'ImportController@tripadvisor');
 
 // Test mod rewrite
