@@ -121,7 +121,8 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Slushie\LaravelAssetic\LaravelAsseticServiceProvider',
+		'Slushie\LaravelAssetic\LaravelAsseticServiceProvider',		
+		'Way\Generators\GeneratorsServiceProvider',
 
 	),
 
