@@ -122,7 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Slushie\LaravelAssetic\LaravelAsseticServiceProvider',		
-		'Way\Generators\GeneratorsServiceProvider',
+		//'Way\Generators\GeneratorsServiceProvider',
 
 	),
 

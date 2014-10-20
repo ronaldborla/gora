@@ -6,8 +6,7 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"slushie/laravel-assetic": "dev-master",
-  		"guzzlehttp/guzzle": "~4.0",
-		"way/form": "dev-master"
+  	"guzzlehttp/guzzle": "~4.0"
 	},
 	"autoload": {
 		"classmap": [
