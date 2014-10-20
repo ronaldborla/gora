@@ -12,6 +12,15 @@
 */
 
 Route::get('', 'HomeController@home');
+/**
+ * Use SMS Controller
+ */
+Route::post('sms', 'SmsController@receiver');
+/**
+ * Test SMS Receiver
+ */
+Route::get('sms/test', 'SmsController@test');
+Route::post('sms/test', 'SmsController@test');
 
 /*
     mockup
@@ -22,9 +31,3 @@ Route::get('mockup/home', function() {
 });
 
 Route::get('import/tripadvisor', 'ImportController@tripadvisor');
-
-// Test mod rewrite
-Route::get('test', function() {
-
-  phpinfo();
-});

@@ -16,7 +16,11 @@
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php",
-			"app/support"
+			"app/support",
+			"app/sms",
+			"app/sms/adapters",
+			"app/sms/controllers",
+			"app/sms/models"
 		]
 	},
 	"scripts": {
