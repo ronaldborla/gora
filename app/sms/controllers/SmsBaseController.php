@@ -12,11 +12,6 @@
     protected $api;
 
     /**
-     * Set args
-     */
-    protected $args;
-
-    /**
      * Our response
      */
     protected $response;
@@ -25,34 +20,17 @@
     /**
      * Constructor
      */
-    function __construct(SmsApiInterface $api, $args = '') {
+    function __construct(SmsApiInterface $api) {
       // Set
       $this->api = $api;
-      // Set args
-      $this->args = $args;
-    }
-
-    /**
-     * Get
-     */
-    function __get($name) {
-      // If name is keyword
-      if ($name == 'keyword') {
-        // Get class
-        $class = get_called_class();
-        // Extract name
-        $keyword = strtolower(substr($class, 3, strlen($class) - 13));
-        // Return
-        return $this->api->keywordIsReserved($keyword) ? null : $keyword;
-      }
     }
 
     /**
      * Instance
      */
-    static function instance(SmsApiInterface $api, $args = '') {
+    static function instance(SmsApiInterface $api) {
       // Just declare
-      return new static($api, $args);
+      return new static($api);
     }
 
     /**

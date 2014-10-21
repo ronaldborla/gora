@@ -107,52 +107,13 @@
                   ->setMobile($data['mobile'])
                   ->setMessage($data['message']);
     }
-
-    /**
-     * Check if keyword is reserved
-     */
-    function keywordIsReserved($keyword) {
-      // Return
-      return in_array($keyword, array(
-        'base',
-        'general'
-      ));
-    }
-
+    
     /**
      * Request
      */
     function request() {
-      /**
-       * Parse
-       */
-      $parse = $this->parse();
-      // Set controller
-      $controllerName = null;
-
-      // Check if there's keyword, and it's not reserved
-      if ($parse['keyword'] && !$this->keywordIsReserved($parse['keyword'])) {
-        // If controller exists
-        if (class_exists('Sms' . ($keyword = ucfirst($parse['keyword'])) . 'Controller')) {
-          // Set as controller
-          $controllerName = $keyword;
-        }
-      }
-
-      // If there's no name
-      if (!$controllerName) {
-        // Set controller name as general
-        $controllerName = 'General';
-        // Set args as the whole message
-        $parse['args'] = $this->message;
-      }
-
-      // Declare controller
-      $controller = 'Sms' . $controllerName . 'Controller';
       // Return
-      return $controller::instance($this, $parse['args'])
-                        // Send back request
-                        ->request();
+      return SmsKeywordController::instance($this)->request();
     }
 
     /**
