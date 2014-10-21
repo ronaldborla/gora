@@ -4,6 +4,8 @@ class BaseController extends Controller {
 
 	// Set user
 	protected $user = null;
+	// Set chikka 
+	protected $sms = null;
 
 	/**
 	 * Construct
@@ -11,6 +13,9 @@ class BaseController extends Controller {
 	function __construct() {
 		// Set current user
 		$this->user = User::check() ? User::current() : null;
+		// Declare sms sender
+		$this->sms = new SmsSender(Config::get('sms.chikka'));
+
 		// Share
 		View::share(array(
 			// As current user

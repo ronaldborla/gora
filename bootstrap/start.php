@@ -26,8 +26,13 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
+  /**
+   * To get hostname, open command prompt or terminal, type "hostname"
+   */
 	'live' => array('gora'),
-  'local'=> array('ORION')
+  'ronald'=> array('RonaldBorla-PC'),
+  'abz'=> array('hostname'),
+  'brylle'=> array('hostname') 
 
 ));
 
