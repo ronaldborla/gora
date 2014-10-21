@@ -30,6 +30,16 @@ class UsersController extends \BaseController {
 	 *
 	 * @return Response
 	 */
+	public function announcements()
+	{
+		return View::make('users.announcements');
+	}
+
+	/**
+	 * Show the form for creating a new user
+	 *
+	 * @return Response
+	 */
 	public function create()
 	{
 		return View::make('users.create');

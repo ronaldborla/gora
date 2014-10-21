@@ -13,3 +13,15 @@ body {
 
     margin-bottom: 20px;
 }
+
+.announcenment {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.announcenment p {
+    line-height: 25px;
+}
+
+.announcenment h3 {
+    padding-bottom: 20px;
+}

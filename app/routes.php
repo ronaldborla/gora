@@ -28,7 +28,9 @@ Route::post('sms/test', 'SmsController@test');
 */
 
 Route::get('search', 'UsersController@search');
-Route::get('mockup/home', function() {
+Route::get('announcements', 'UsersController@announcements');
+
+Route::get('home', function() {
     return View::make('home');
 });
 
