@@ -22,6 +22,10 @@ Route::post('sms', 'SmsController@receiver');
 Route::get('sms/test', 'SmsController@test');
 Route::post('sms/test', 'SmsController@test');
 
+Route::get('import/tripadvisor', 'ImportController@tripadvisor');
+Route::post('import/tripadvisor', 'ImportController@tripadvisor');
+Route::get('import/list', 'ImportController@elist');
+Route::post('import/list', 'ImportController@elist');
 /*
     mockup
     author: abz
@@ -33,5 +37,3 @@ Route::get('announcements', 'UsersController@announcements');
 Route::get('home', function() {
     return View::make('home');
 });
-
-Route::get('import/tripadvisor', 'ImportController@tripadvisor');

@@ -12,56 +12,208 @@ class ImportController extends BaseController {
    */
   function tripadvisor() {
 
-    // Get url
-    $url = trim(Input::get('url'));
-    // Set info
-    $info = array();
-    // Set imported
-    $imported = null;
-    // If there's URL
-    if ($url) {
-      // Get info
-      $info = $this->extractTripAdvisor($url);
+    // Do next
+    $next = Input::get('next') !== null;
+    $skip = Input::get('skip') !== null;
 
-      // If import is set
-      if (Input::get('import') == '1') {
+    // Get url
+    $url = $this->getNext();
+    // Get info
+    $info = $url ? $this->extractTripAdvisor($url) : array();
+
+    // Duped
+    $duped = false;
+
+    if ($info) {
+      // Check if duped
+      $duped = $this->duped($info);
+    }
+    // Imported
+    $imported = false;
+    $skipped = false;
+
+    // If there's url
+    if ($info) {
+
+      if ($next) {
         // Do import
-        $imported = $this->importEstablishment($info);
+        if (!$duped) {
+          // Do import
+          $establishment = $this->importEstablishment($info);
+          // Set imported
+          $imported = $establishment->id ? $establishment->name : '';
+        }
+      }
+      if ($next || $skip) {
+        // Skipped
+        $skipped = $skip ? $info['establishment']['name'] : false;
+        // Remove
+        $this->removeFromList($url);
+        // Get url
+        $url = $this->getNext();
+        // Get info
+        $info = $url ? $this->extractTripAdvisor($url) : array();
+
+        $duped = $this->duped($info);
       }
     }
 
-    ?>
-    <form method="get" action="<?php action('ImportController@tripadvisor'); ?>">
-      <input type="text" name="url" value="<?php echo e($url); ?>" />
-      <button type="submit">Load</button><?php
-      // If there's url
-      if ($url) {
-      ?>
+?>
+<html>
+<head>
+<title>Import Restaurants</title>
+</head>
+<body>
+<?php
 
-      <button type="submit" name="import" value="1">Import</button><?php
-      }
-      ?>
+    echo Form::open(array('action'=> 'ImportController@tripadvisor', 'method'=> 'get'));
 
-    </form>
-    <?php
+    $props = array('type'=> 'submit', 'name'=> 'next');
+    if ($duped) $props['disabled'] = 'disabled';
 
-    // If there's URL
-    if ($url) {
-      // If imported
-      if ($imported) {
-        // Message
-        echo '<div style="color: #006600;"><em>Establishment successfully imported!</em></div>';
-      } else {
-        // Find
-        $findEstablishment = Establishment::where('name', '=', trim($info['establishment']['name']))->limit(1)->first();
-        // If found
-        if ($findEstablishment && $findEstablishment->id) {
-          // Already exists
-          echo '<div style="color: #aa0000;"><em>Establishment already exists!</em></div>';
+    echo Form::button('Import and Next', $props);
+    echo Form::button('Skip', array('type'=> 'submit', 'name'=> 'skip'));
+
+    echo Form::close();
+
+    if ($imported !== false) {
+      echo '<div>',($imported ? ('Successfully imported ' . e($imported)) : ('Failed to import ' . e($imported))),'</div>';
+    }
+    if ($skipped) {
+      echo '<div>Skipped ',e($skipped),'</div>';
+    }
+    if ($duped) {
+      echo '<div style="color: #880000">This restaurant already exists in the database</div>';
+    }
+
+    // If there's info
+    if ($info) {
+      echo '<a href="',$url,'" target="_blank">View restaurant</a>';
+      echo '<pre>',print_r($info,true),'</pre>';
+    }
+?>
+</body>
+</html>
+<?php
+  }
+
+  /**
+   * Add list
+   */
+  function elist() {
+
+    //$this->removeFromList('http://www.tripadvisor.com.ph/Restaurant_Review-g298445-d2525997-Reviews-Chaya-Baguio_Benguet_Province_Cordillera_Region_Luzon.html');
+
+    if (Input::hasFile('list')) {
+      // List
+      $list = array();
+      // Load file
+      $rawList = explode("\n", @file_get_contents(Input::file('list')->getPathname()));
+      // Loop
+      if ($rawList) {
+        foreach ($rawList as $rawItem) {
+          if (!($rawItem = trim($rawItem))) continue;
+          // Check if valid
+          if (preg_match('/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/', $rawItem)) {
+            // add 
+            $list[] = $rawItem;
+          }
         }
       }
-      // Dump
-      echo '<pre>',print_r($info, true),'</pre>';
+      // Add to list
+      $this->addToList($list);
+    }
+
+?>
+<html>
+<head>
+<title>Import Restaurants</title>
+</head>
+<body>
+    <?php
+
+    echo Form::open(array('action'=> 'ImportController@elist', 'files'=> true));
+
+    echo Form::file('list');
+    echo Form::button('Upload', array('type'=> 'submit'));
+
+    echo Form::close();
+
+    if (is_file($file = public_path() . '/list.txt')) {
+      // Print
+      echo '<a href="/list.txt" target="_blank">View list</a>';
+    }
+
+    ?>
+</body>
+</html>
+<?php
+  }
+
+  // Check if duped
+  function duped($info) {
+    return Establishment::where('name', '=', $info['establishment']['name'])
+                        ->where('address', '=', $info['establishment']['address'])
+                        ->limit(1)
+                        ->first() ? true : false;
+  }
+
+  /**
+   * Get list
+   */
+  function getList() {
+    // Get list
+    $list = explode("\n", @file_get_contents(public_path().'/list.txt'));
+    // If first item is empty
+    if (!$list[0]) $list = array();
+    // Return
+    return $list;
+  }
+
+  /**
+   * Get next
+   */
+  function getNext() {
+    $list = $this->getList();
+    return (isset($list[0]) && $list[0]) ? $list[0] : null;
+  }
+
+  /**
+   * Add to list
+   */
+  function addToList($list) {
+
+    // Oldlist
+    $oldList = $this->getList();
+
+    if (is_array($list) && $list) {
+      foreach ($list as $item) {
+        // Cleanup
+        if (!($item = trim($item))) continue;
+        // Make sure it still doesnt exist in list
+        if (!in_array($item, $oldList)) {
+          // Add to list
+          $oldList[] = $item;
+        }
+      }
+    }
+
+    // Save oldlist
+    @file_put_contents(public_path().'/list.txt', implode("\n", $oldList));
+  }
+
+  /**
+   * Remove from list
+   */
+  function removeFromList($item) {
+    // Get list
+    $list = $this->getList();
+
+    if (($key = array_search($item, $list)) !== false) {
+      // Unset
+      unset($list[$key]);
+      // Save
+      @file_put_contents(public_path().'/list.txt', implode("\n", $list));
     }
   }
 
