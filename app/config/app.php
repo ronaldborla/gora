@@ -123,7 +123,6 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Slushie\LaravelAssetic\LaravelAsseticServiceProvider',		
 		'Way\Generators\GeneratorsServiceProvider',
-
 	),
 
 	/*
