@@ -14,6 +14,17 @@ class UsersController extends \BaseController {
 		return View::make('users.index', compact('users'));
 	}
 
+
+	/**
+	 * Show the form for creating a new user
+	 *
+	 * @return Response
+	 */
+	public function search()
+	{
+		return View::make('users.search');
+	}
+
 	/**
 	 * Show the form for creating a new user
 	 *

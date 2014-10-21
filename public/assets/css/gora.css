@@ -1,0 +1,15 @@
+body {
+    padding-top: 100px;
+}
+
+.navbar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#search {
+    height: 60px;
+    font-size: 28px;
+
+    margin-bottom: 20px;
+}

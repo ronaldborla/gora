@@ -26,6 +26,8 @@ Route::post('sms/test', 'SmsController@test');
     mockup
     author: abz
 */
+
+Route::get('search', 'UsersController@search');
 Route::get('mockup/home', function() {
     return View::make('home');
 });
