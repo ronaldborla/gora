@@ -15,10 +15,12 @@
      * Get
      */
     function __get($name) {
+      // Get class
+      $class = get_called_class();
       // If name is keyword
-      if ($name == 'keyword') {
+      if ($class != 'SmsKeywordController' && $name == 'keyword') {
         // Extract name
-        return strtolower(substr(get_called_class(), 10));
+        return strtolower(substr($class, 10));
       }
     }
 
@@ -26,6 +28,12 @@
      * Process
      */
     function initialize() {
+
+      // If there's already a keyword, return
+      if ($this->keyword) {
+        // Return
+        return $this;
+      }
       /**
        * Parse message
        */
