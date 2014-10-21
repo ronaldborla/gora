@@ -107,7 +107,7 @@
                   ->setMobile($data['mobile'])
                   ->setMessage($data['message']);
     }
-    
+
     /**
      * Request
      */
@@ -145,5 +145,21 @@
         'keyword'=> strtolower($keyword),
         'args'=> $args
       );
+    }
+
+    /**
+     * Get filters
+     */
+    function filters($message, $fields) {
+      // Locate all fields in message
+      $filterPos = array();
+      // If there are fields
+      if (is_array($fields) && $fields) {
+        // Loop through fields
+        foreach ($fields as $field) {
+          // Find this field
+          
+        }
+      }
     }
   }
