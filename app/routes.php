@@ -26,6 +26,12 @@ Route::get('import/tripadvisor', 'ImportController@tripadvisor');
 Route::post('import/tripadvisor', 'ImportController@tripadvisor');
 Route::get('import/list', 'ImportController@elist');
 Route::post('import/list', 'ImportController@elist');
+
+/**
+ * Maps
+ */
+Route::get('maps', 'MapsController@home');
+
 /*
     mockup
     author: abz
