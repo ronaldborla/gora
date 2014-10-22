@@ -1,7 +1,7 @@
 @extends("layouts.master")
 
 @section('title')
-Search
+Announcements
 @endsection
 
 @section('main-col')

@@ -1,5 +1,9 @@
 @extends("layouts.plain")
 
+@section('title')
+Home
+@endsection
+
 @section('main-col')
 <!-- Header -->
 <div class="intro-header">
