@@ -5,6 +5,7 @@ body {
 .navbar {
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: #f1f6f8;
 }
 
 #search {

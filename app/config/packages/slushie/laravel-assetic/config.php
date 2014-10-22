@@ -56,8 +56,9 @@ return array(
       // named assets defined below
       'assets' => array(
         'assets/css/bootstrap.css',
-        'assets/css/jquery-ui.css' ,
-        'assets/css/gora.css'      
+        'assets/css/jquery-ui.css',
+        'assets/css/gora.css',
+        'assets/css/gora.min.css'      
         ),
 
       // output path (probably relative to public)

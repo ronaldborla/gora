@@ -15,4 +15,9 @@ Search
 @endsection
 
 @section('sidebar')
+<ul class="nav nav-pills nav-stacked">
+  <li><a href="#">Sidebar 1</a></li>
+  <li><a href="#">Sidebar 2</a></li>
+  <li><a href="#">Sidebar 3</a></li>
+</ul>
 @endsection
