@@ -28,6 +28,20 @@ Route::get('import/list', 'ImportController@elist');
 Route::post('import/list', 'ImportController@elist');
 
 /**
+ * Refresh
+ */
+Route::get('refresh', function() {
+
+  foreach (Establishment::all() as $establishment) {
+    // Update
+    $establishment->updateTags();
+  }
+  // Success
+  echo 'Updated tags';
+
+});
+
+/**
  * Maps
  */
 Route::get('maps', 'MapsController@home');

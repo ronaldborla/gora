@@ -150,16 +150,57 @@
     /**
      * Get filters
      */
-    function filters($message, $fields) {
+    static function filters($message, $fields) {
+      // Set filters
+      $filters = array();
       // Locate all fields in message
       $filterPos = array();
       // If there are fields
       if (is_array($fields) && $fields) {
         // Loop through fields
         foreach ($fields as $field) {
+          // Get length
+          $len = strlen($field);
           // Find this field
-          
+          $pos = stripos($message, $field);
+          // Start
+          $start = $pos + $len;
+
+          if ((!isset($message[$pos - 1]) || $message[$pos - 1] == ' ') &&
+              (!isset($message[$start]) || $message[$start] == ' ')) {
+            // Set pos
+            $filterPos[] = array(
+              'field'=> $field,
+              'len'=> $len,
+              'pos'=> $pos,
+              'start'=> $start
+            );
+          }
         }
       }
+      // If there are filters
+      if ($filterPos) {
+        // Loop through filters
+        foreach ($filterPos as $i=> $fieldPos) {
+          // Get length
+          $length = false;
+          // If there's a next
+          if (isset($filterPos[$i + 1])) {
+            // Get our length
+            $length = $filterPos[$i + 1]['pos'] - $fieldPos['start'];
+          }
+          // Get content of field
+          $filters[$fieldPos['field']] = trim(($length !== false) ?
+                                              substr($message, $fieldPos['start'], $length) :
+                                              substr($message, $fieldPos['start']));
+        }
+      }
+      // Get query
+      $query = trim($filterPos ? substr($message, 0, $filterPos[0]['pos']) : $message);
+      // Return
+      return array(
+        'query'=> $query,
+        'filters'=> $filters
+      );
     }
   }

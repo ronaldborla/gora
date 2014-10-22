@@ -102,7 +102,7 @@ class ImportController extends BaseController {
    */
   function elist() {
 
-    //$this->removeFromList('http://www.tripadvisor.com.ph/Restaurant_Review-g298445-d2525997-Reviews-Chaya-Baguio_Benguet_Province_Cordillera_Region_Luzon.html');
+    var_dump(Establishment::within()->first());
 
     if (Input::hasFile('list')) {
       // List
