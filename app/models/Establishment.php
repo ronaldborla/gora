@@ -95,7 +95,7 @@
      */
     static function search($keyword, $query = null) {
       // Set select
-      $rawSelect = DB::raw('MATCH(tags) AGAINST ("'.mysqli_real_escape_string($keyword).'" IN BOOLEAN MODE) `relevance`');
+      $rawSelect = DB::raw('MATCH(tags) AGAINST ("'.addslashes($keyword).'" IN BOOLEAN MODE) `relevance`');
       // Set query
       $query = $query ? $query->addSelect($rawSelect) : static::addSelect($rawSelect);
       // Return
