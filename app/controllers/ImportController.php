@@ -54,7 +54,7 @@ class ImportController extends BaseController {
         // Get info
         $info = $url ? $this->extractTripAdvisor($url) : array();
 
-        $duped = $this->duped($info);
+        $duped = $info ? $this->duped($info) : false;
       }
     }
 

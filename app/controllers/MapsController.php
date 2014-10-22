@@ -61,7 +61,7 @@
     return new google.maps.Circle({
       'map': map,
       'center': new google.maps.LatLng(center.lat, center.lng),
-      'radius': radius,
+      'radius': radius
     });
   }
 </script>
