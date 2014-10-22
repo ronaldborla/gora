@@ -102,7 +102,7 @@ class ImportController extends BaseController {
    */
   function elist() {
 
-    var_dump(Establishment::within()->first());
+    // var_dump(Establishment::within()->first());
 
     if (Input::hasFile('list')) {
       // List
