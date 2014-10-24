@@ -105,7 +105,7 @@
         // If str is found
         if (strpos($range, $s) !== false) {
           // Explode
-          $arrRange = explode($s);
+          $arrRange = explode($s, $range);
         }
       }
       // If still empty
@@ -118,30 +118,26 @@
       // Set query
       $query = $query ? $query : new static();
       // If there's lo
-      if ($lo || $hi) {
+      if ($lo && $hi) {
         // Set where
         $query->where(function($query) use ($lo, $hi) {
-
-          if ($lo && $hi) {
-            // Set both
-            $query->orWhere(function($query) use ($lo) {
-              // Use lo
-              $query->where('price_min', '>=', $lo)
-                    ->where('price_max', '<=', $lo);
-            })->orWhere(function($query) use ($hi) {
-              // Use hi
-              $query->where('price_min', '>=', $hi)
-                    ->where('price_max', '<=', $hi);
-            });
-          }
-
+          // Set both
+          $query->orWhere(function($query) use ($lo) {
+            // Use lo
+            $query->where('price_min', '<=', $lo)
+                  ->where('price_max', '>=', $lo);
+          })->orWhere(function($query) use ($hi) {
+            // Use hi
+            $query->where('price_min', '<=', $hi)
+                  ->where('price_max', '>=', $hi);
+          });
         });
-      } else {
+      } elseif ($lo || $hi) {
         // Set budget
         $budget = $lo ? $lo : $hi;
         // Use budget
-        $query->where('price_min', '>=', $budget)
-              ->where('price_max', '<=', $budget);
+        $query->where('price_min', '<=', $budget)
+              ->where('price_max', '>=', $budget);
       }
       // Return query
       return $query;
@@ -185,6 +181,33 @@
       $this->save();
       // Return
       return $this;
+    }
+
+    /**
+     * Categories
+     */
+    function contacts() {
+      // Get categories
+      $contacts = Contact::where('establishment_id', '=', $this->id)
+                         ->orderBy('order', 'asc')
+                         ->get();
+      // Arranged
+      $allContacts = array();
+      // Loop
+      if (!$contacts->isEmpty()) {
+        // Loop
+        foreach ($contacts as $contact) {
+          // Add
+          if (!isset($allContacts[$contact->type])) {
+            // Create
+            $allContacts[$contact->type] = array();
+          }
+          // Append
+          $allContacts[$contact->type][] = $contact;
+        }
+      }
+      // Return
+      return $allContacts;
     }
 
   }
