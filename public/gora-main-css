@@ -7402,6 +7402,24 @@ body .ui-tooltip {
 
 body {
     padding-top: 100px;
+    font-weight: normal;
+}
+
+a {
+    text-transform: none;
+    text-decoration: none;
+    cursor: hand;
+    color: #197b30;
+}
+
+a:hover {
+    text-decoration: none; 
+    cursor: hand;  
+    color: #197b30; 
+}
+
+p {
+    font-weight: normal;
 }
 
 .navbar {
@@ -7427,6 +7445,21 @@ body {
 
 .announcenment h3 {
     padding-bottom: 20px;
+}
+
+.list-block {
+    padding: 10px;
+    border-bottom: 1px #ebebeb solid;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #eff7ee;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.sidebar {
+    margin-top: -20px;
 }
 body,
 html {

@@ -54,6 +54,10 @@ Route::get('maps', 'MapsController@home');
 Route::get('search', 'UsersController@search');
 Route::get('announcements', 'UsersController@announcements');
 
+Route::get('members/profile', 'MembersController@profile');
+Route::get('members/subscriptions', 'MembersController@subscriptions');
+Route::get('members/friends', 'MembersController@friends');
+
 Route::get('home', function() {
     return View::make('home');
 });
