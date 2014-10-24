@@ -16,13 +16,22 @@
                     </a>
                     <ul class="nav nav-pills nav-stacked">
                       <li>
-                          <a href="<?php print url('members/subscriptions'); ?>">Subscriptions</a>
+                          <a href="<?php print url('members/subscriptions'); ?>">
+                          <span class="fa fa-building"></span>
+                          Subscriptions
+                          </a>
                       </li>
                       <li>
-                          <a href="<?php print url('members/friends'); ?>">Friends</a>
+                          <a href="<?php print url('members/friends'); ?>">
+                          <span class="fa fa-users"></span>
+                          Friends
+                          </a>
                       </li>
                       <li>
-                          <a href="<?php print url('search'); ?>">Search</a>
+                          <a href="<?php print url('search'); ?>">
+                          <span class="fa fa-search"></span>
+                          Search
+                          </a>
                       </li>
                   </ul>
               </div>      

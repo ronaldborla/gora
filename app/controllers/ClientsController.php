@@ -25,6 +25,76 @@ class ClientsController extends \BaseController {
 	}
 
 	/**
+	 * Show the form for creating a new client
+	 *
+	 * @return Response
+	 */
+	public function dashboard()
+	{
+		return View::make('clients.dashboard');
+	}
+		
+	/**
+	 * Show the form for creating a new client
+	 *
+	 * @return Response
+	 */
+	public function establishment()
+	{
+		return View::make('clients.establishment');
+	}
+
+	/**
+	 * Show the form for creating a new client
+	 *
+	 * @return Response
+	 */
+	public function credits()
+	{
+		return View::make('clients.credits');
+	}
+
+	/**
+	 * Show the form for creating a new client
+	 *
+	 * @return Response
+	 */
+	public function profile()
+	{
+		return View::make('clients.profile');
+	}
+
+	/**
+	 * Show the form for creating a new member
+	 *
+	 * @return Response
+	 */
+	public function friends()
+	{
+		return View::make('clients.friends');
+	}
+
+	/**
+	 * Show the form for creating a new member
+	 *
+	 * @return Response
+	 */
+	public function subscriptions()
+	{
+		return View::make('clients.subscriptions');
+	}
+
+	/**
+	 * Show the form for creating a new member
+	 *
+	 * @return Response
+	 */
+	public function subscribers()
+	{
+		return View::make('clients.subscribers');
+	}
+
+	/**
 	 * Store a newly created client in storage.
 	 *
 	 * @return Response

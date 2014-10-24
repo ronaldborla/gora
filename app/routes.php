@@ -54,9 +54,21 @@ Route::get('maps', 'MapsController@home');
 Route::get('search', 'UsersController@search');
 Route::get('announcements', 'UsersController@announcements');
 
+// members
 Route::get('members/profile', 'MembersController@profile');
 Route::get('members/subscriptions', 'MembersController@subscriptions');
 Route::get('members/friends', 'MembersController@friends');
+
+// clients
+Route::get('clients/credits', 'ClientsController@credits');
+Route::get('clients/profile', 'ClientsController@profile');
+Route::get('clients/establishment', 'ClientsController@establishment');
+Route::get('clients/subscriptions', 'ClientsController@subscriptions');
+Route::get('clients/subscribers', 'ClientsController@subscribers');
+Route::get('clients/friends', 'ClientsController@friends');
+Route::get('clients/credits', 'ClientsController@credits');
+Route::get('clients/dashboard', 'ClientsController@dashboard');
+
 
 Route::get('home', function() {
     return View::make('home');

@@ -58,7 +58,8 @@ return array(
         'assets/css/bootstrap.css',
         'assets/css/jquery-ui.css',
         'assets/css/gora.css',
-        'assets/css/gora.min.css'      
+        'assets/css/gora.min.css',
+        'font-awesome-4.1.0/css/font-awesome.min.css'
         ),
 
       // output path (probably relative to public)

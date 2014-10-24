@@ -59,3 +59,13 @@ p {
 .sidebar {
     margin-top: -20px;
 }
+
+.sidebar .nav > li > a {
+    color: #534741 !important;
+    font-weight: normal !important;
+}
+
+.credits {
+    font-size: 34px;
+    color:#00aeef;
+}
