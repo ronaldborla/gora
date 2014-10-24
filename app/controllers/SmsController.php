@@ -49,7 +49,7 @@
         $post = array(
           'message_type'=> 'incoming',
           'mobile_number'=> Input::get('mobile'),
-          'shortcode'=> '29290001',
+          'shortcode'=> Config::get('sms.chikka.shortcode'),
           'request_id'=> sha1(microtime(true)),
           'message'=> Input::get('message'),
           'timestamp'=> time(),
@@ -86,5 +86,10 @@
 </body>
 </html>
 <?php
+    }
+
+    function send() {
+
+      // $this->sms->send('09223682399', 'hello world');
     }
   }

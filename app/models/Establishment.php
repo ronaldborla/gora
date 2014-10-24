@@ -87,7 +87,64 @@
      */
     static function near($lat, $lng, $radius = 1000, $query = null) {
       // Just extend radius by 200 and use within
-      return static::within($lat, $lng, $radius + 200, $query);
+      return static::within($lat, $lng, $radius + 1000, $query);
+    }
+
+    /**
+     * Budget
+     */
+    static function budget($range, $query = null) {
+      // Convert to lower case
+      $range = Str::lower($range);
+      // Str to use to split
+      $str = array('-', 'to', ' ');
+
+      $arrRange = array();
+      // Loop through str
+      foreach ($str as $s) {
+        // If str is found
+        if (strpos($range, $s) !== false) {
+          // Explode
+          $arrRange = explode($s);
+        }
+      }
+      // If still empty
+      if (!$arrRange) $arrRange = array($range);
+      // Get range
+      $lo = isset($arrRange[0]) ? intval($arrRange[0]) : 0;
+      // Get hi
+      $hi = isset($arrRange[1]) ? intval($arrRange[1]) : 0;
+
+      // Set query
+      $query = $query ? $query : new static();
+      // If there's lo
+      if ($lo || $hi) {
+        // Set where
+        $query->where(function($query) use ($lo, $hi) {
+
+          if ($lo && $hi) {
+            // Set both
+            $query->orWhere(function($query) use ($lo) {
+              // Use lo
+              $query->where('price_min', '>=', $lo)
+                    ->where('price_max', '<=', $lo);
+            })->orWhere(function($query) use ($hi) {
+              // Use hi
+              $query->where('price_min', '>=', $hi)
+                    ->where('price_max', '<=', $hi);
+            });
+          }
+
+        });
+      } else {
+        // Set budget
+        $budget = $lo ? $lo : $hi;
+        // Use budget
+        $query->where('price_min', '>=', $budget)
+              ->where('price_max', '<=', $budget);
+      }
+      // Return query
+      return $query;
     }
 
     /**
