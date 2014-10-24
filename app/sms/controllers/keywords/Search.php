@@ -30,7 +30,7 @@
 
         foreach ($get as $i=> $establishment) {
           // Append to text
-          $results[] = chr($i + 65) . '. ' . $establishment->name . ', ' . $establishment->price_min;
+          $results[] = chr($i + 65) . '. ' . $establishment->name;
         }
       } else {
         // No results
