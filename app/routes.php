@@ -11,8 +11,6 @@
 |
 */
 
-return;
-
 Route::get('', 'HomeController@home');
 /**
  * Use SMS Controller
