@@ -51,6 +51,23 @@ Route::get('maps', 'MapsController@home');
     author: abz
 */
 
+if(Sentry::check()) {
+
+    $user       = Sentry::findUserByID(Sentry::getUser()->id);
+    $groups     = $user->getGroups();
+
+    foreach($groups as $group)
+    {
+        $grou_user =  $group->name;
+    }
+
+} else {
+
+    Route::get('login', 'UsersController@login');
+}
+
+Route::post('authenticate', 'UsersController@authenticate');
+
 Route::get('search', 'UsersController@search');
 Route::get('announcements', 'UsersController@announcements');
 
@@ -72,4 +89,9 @@ Route::get('clients/dashboard', 'ClientsController@dashboard');
 
 Route::get('home', function() {
     return View::make('home');
+});
+
+Route::get('logout', function() {
+    Sentry::logout();
+    return Redirect::to('login');
 });

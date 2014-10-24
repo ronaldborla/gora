@@ -17,6 +17,11 @@
         <li><a href="/home">Home</a></li>
         <li><a href="/search">Search</a></li>
         <li><a href="/announcements">Announcements</a></li>
+        @if(Sentry::check())
+        <li><a href="/logout">Logout</a></li>
+        @else
+        <li><a href="/login">Login</a></li>
+        @endif
       </ul>
     </div>
     <!-- /.navbar-collapse -->

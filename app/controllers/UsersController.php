@@ -2,127 +2,192 @@
 
 class UsersController extends \BaseController {
 
-	/**
-	 * Display a listing of users
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		$users = User::all();
 
-		return View::make('users.index', compact('users'));
-	}
+    /**
+     * Show the form for creating a new user
+     *
+     * @return Response
+     */
+    public function login()
+    {
+        return View::make('users.login');
+    }
+
+    /**
+     * Show the form for creating a new user
+     *
+     * @return Response
+     */
+    public function authenticate()
+    {
+        try
+        {
+        // Login credentials
+            $credentials = array(
+                'mobile'    => Input::get('mobile'),
+                'password' => Input::get('password'),
+                );
+
+        // Authenticate the user
+            $user = Sentry::authenticate($credentials, false);
+        }
+        catch (Cartalyst\Sentry\Users\LoginRequiredException $e)
+        {
+            return View::make('users.login')->withErrors('Login field is required.');
+        }
+        catch (Cartalyst\Sentry\Users\PasswordRequiredException $e)
+        {
+            return View::make('users.login')->withErrors('Password field is required.');
+        }
+        catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
+        {
+            return View::make('users.login')->withErrors('Wrong password, try again.');
+        }
+        catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+        {
+            return View::make('users.login')->withErrors('User was not found.');
+        }
+        catch (Cartalyst\Sentry\Users\UserNotActivatedException $e)
+        {
+            return View::make('users.login')->withErrors('User is not activated.');
+        }
+
+        // The following is only required if the throttling is enabled
+        catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e)
+        {
+            return View::make('users.login')->withErrors('User is suspended.');
+        }
+        catch (Cartalyst\Sentry\Throttling\UserBannedException $e)
+        {
+            return View::make('users.login')->withErrors('User is suspended.');
+        }
+
+        //echo Sentry::getUser()->id;
+        return Redirect::to('announcements');
+
+    }
+
+    /**
+     * Display a listing of users
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        $users = User::all();
+
+        return View::make('users.index', compact('users'));
+    }
 
 
-	/**
-	 * Show the form for creating a new user
-	 *
-	 * @return Response
-	 */
-	public function search()
-	{
-		return View::make('users.search');
-	}
+    /**
+     * Show the form for creating a new user
+     *
+     * @return Response
+     */
+    public function search()
+    {
+        return View::make('users.search');
+    }
 
-	/**
-	 * Show the form for creating a new user
-	 *
-	 * @return Response
-	 */
-	public function announcements()
-	{
-		return View::make('users.announcements');
-	}
+    /**
+     * Show the form for creating a new user
+     *
+     * @return Response
+     */
+    public function announcements()
+    {
+        return View::make('users.announcements');
+    }
 
-	/**
-	 * Show the form for creating a new user
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		return View::make('users.create');
-	}
+    /**
+     * Show the form for creating a new user
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return View::make('users.create');
+    }
 
-	/**
-	 * Store a newly created user in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		$validator = Validator::make($data = Input::all(), User::$rules);
+    /**
+     * Store a newly created user in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        $validator = Validator::make($data = Input::all(), User::$rules);
 
-		if ($validator->fails())
-		{
-			return Redirect::back()->withErrors($validator)->withInput();
-		}
+        if ($validator->fails())
+        {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
 
-		User::create($data);
+        User::create($data);
 
-		return Redirect::route('users.index');
-	}
+        return Redirect::route('users.index');
+    }
 
-	/**
-	 * Display the specified user.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		$user = User::findOrFail($id);
+    /**
+     * Display the specified user.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
 
-		return View::make('users.show', compact('user'));
-	}
+        return View::make('users.show', compact('user'));
+    }
 
-	/**
-	 * Show the form for editing the specified user.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		$user = User::find($id);
+    /**
+     * Show the form for editing the specified user.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit($id)
+    {
+        $user = User::find($id);
 
-		return View::make('users.edit', compact('user'));
-	}
+        return View::make('users.edit', compact('user'));
+    }
 
-	/**
-	 * Update the specified user in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		$user = User::findOrFail($id);
+    /**
+     * Update the specified user in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        $user = User::findOrFail($id);
 
-		$validator = Validator::make($data = Input::all(), User::$rules);
+        $validator = Validator::make($data = Input::all(), User::$rules);
 
-		if ($validator->fails())
-		{
-			return Redirect::back()->withErrors($validator)->withInput();
-		}
+        if ($validator->fails())
+        {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
 
-		$user->update($data);
+        $user->update($data);
 
-		return Redirect::route('users.index');
-	}
+        return Redirect::route('users.index');
+    }
 
-	/**
-	 * Remove the specified user from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		User::destroy($id);
+    /**
+     * Remove the specified user from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        User::destroy($id);
 
-		return Redirect::route('users.index');
-	}
+        return Redirect::route('users.index');
+    }
 
 }
