@@ -50,6 +50,13 @@
         // Return response
         return $this->response;
       } else {
+
+        // If there's response, reply
+        if ($this->response) {
+          // Reply
+          $this->api->sender->reply($this->api->id, $this->api->mobile, $this->response);
+        }
+
         // Return accept
         return $this->api->sender->accept();
       }

@@ -180,6 +180,13 @@
       }
       // If there are filters
       if ($filterPos) {
+        // Sort
+        usort($filterPos, function($a, $b) {
+          // Compare
+          if ($a['pos'] == $b['pos']) return 0;
+          if ($a['pos'] < $b['pos']) return -1;
+          return 1;
+        });
         // Loop through filters
         foreach ($filterPos as $i=> $fieldPos) {
           // Get length
