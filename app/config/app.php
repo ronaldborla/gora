@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Slushie\LaravelAssetic\LaravelAsseticServiceProvider',		
 		'Way\Generators\GeneratorsServiceProvider',
+		'Cartalyst\Sentry\SentryServiceProvider',
 	),
 
 	/*
@@ -190,6 +191,8 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 		'Asset'           => 'Slushie\LaravelAssetic\Facades\AssetFacade',
+		'Sentry' 		  => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
+
 
 	),
 

@@ -11,8 +11,6 @@ class BaseController extends Controller {
 	 * Construct
 	 */
 	function __construct() {
-		// Set current user
-		$this->user = User::check() ? User::current() : null;
 		// Declare sms sender
 		$this->sms = new SmsSender(Config::get('sms.chikka'));
 
