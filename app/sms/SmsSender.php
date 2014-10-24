@@ -43,6 +43,7 @@
     function receive($callback = null) {
       // Receive message first
       $receive = $this->sender->receiveMessage();
+
       // If false, return nothing
       if ($receive === false) return array();
       // Set args
