@@ -64,6 +64,8 @@ if(Sentry::check()) {
 } else {
 
     Route::get('login', 'UsersController@login');
+    Route::get('register', 'UsersController@register');
+    Route::post('register-user', 'UsersController@registerUser');
 }
 
 Route::post('authenticate', 'UsersController@authenticate');

@@ -16,7 +16,10 @@ html {
 }
 body {
   margin: 0;
+  
+  font-weight: normal !important;
 }
+
 article,
 aside,
 details,

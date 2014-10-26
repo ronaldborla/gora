@@ -8,9 +8,8 @@
 <body>
     <div class="container">
         @include('layouts/navigation')  
-        <center>
-            @yield('main-col')
-        </center>  
+        
+        @yield('main-col')
     </div>
 </body>
 </html>

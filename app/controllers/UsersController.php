@@ -2,6 +2,57 @@
 
 class UsersController extends \BaseController {
 
+    public function register()
+    {
+        return View::make('users.register');
+    }
+
+    public function registerUser()
+    {
+        try
+        {
+            $user = Sentry::createUser(array(
+                'first_name'=> Input::get('first_name'),
+                'last_name' => Input::get('last_name'),
+                'mobile'    => Input::get('mobile'),
+                'password'  => Input::get('password'),
+                'activated' => true,
+                ));
+
+            $adminGroup = Sentry::findGroupById(3);
+
+            $user->addGroup($adminGroup);
+        }
+        catch (Cartalyst\Sentry\Users\LoginRequiredException $e)
+        {
+            return View::make('users.register')->withErrors('Login field is required.');
+        }
+        catch (Cartalyst\Sentry\Users\PasswordRequiredException $e)
+        {
+            return View::make('users.register')->withErrors('Password field is required.');
+        }
+        catch (Cartalyst\Sentry\Users\UserExistsException $e)
+        {
+            return View::make('users.register')->withErrors('User with this login already exists.');
+        }
+        catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e)
+        {
+            return View::make('users.register')->withErrors('Group was not found.');
+        }
+
+
+        // Login credentials
+        $credentials = array(
+            'mobile'    => Input::get('mobile'),
+            'password' => Input::get('password'),
+            );
+
+        // Authenticate the user
+        $user = Sentry::authenticate($credentials, false);
+
+        //echo Sentry::getUser()->id;
+        return Redirect::to('home');
+    }
 
     /**
      * Show the form for creating a new user
@@ -63,7 +114,7 @@ class UsersController extends \BaseController {
         }
 
         //echo Sentry::getUser()->id;
-        return Redirect::to('announcements');
+        return Redirect::to('home');
 
     }
 
