@@ -16,7 +16,7 @@ Home
                     <hr class="intro-divider">
                     <ul class="list-inline intro-social-buttons">
                         <li>
-                            <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Gora Search</span></a>
+                            <a href="https://twitter.com/SBootstrap" class="btn btn-primary btn-lg"><span class="network-name">Gora Search</span></a>
                         </li>
                     </ul>
                 </div>
