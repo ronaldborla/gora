@@ -37,7 +37,7 @@
       /**
        * Parse message
        */
-      $parse = $this->api->parse();
+      $parse = parseQuery($this->api->message);
 
       if (!$this->keywordExists($parse['keyword'])) {
         // Set keyword as search
@@ -60,7 +60,7 @@
       $controller = 'SmsKeyword' . $keyword;
       // Require
       require_once($this->keywordsDir() . $keyword . '.php');
-
+      
       // Initialize controller
       $this->response = $controller::instance($this->api)
                                    ->setArgs($args)

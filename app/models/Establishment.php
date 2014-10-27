@@ -4,13 +4,13 @@
    * Establishment model
    */
 
-  class Establishment extends Eloquent {
+  class Establishment extends Query {
 
     // User table
     protected $table = 'establishment';
 
     // Fillable
-    protected $fillable = array('name', 'address', 'lat', 'lng', 'price_min', 'price_max', 'tags', 'user_id');
+    protected $fillable = array('id', 'name', 'address', 'lat', 'lng', 'price_min', 'price_max', 'tags', 'user_id', 'distance', 'from', 'relevance');
 
     /**
      * Update categories
@@ -63,37 +63,31 @@
     }
 
     /**
-     * Fill *
-     */
-    static function fillColumns($query = null) {
-      // Fill
-      return $query ? $query->addSelect('*') : static::addSelect('*');
-    }
-
-    /**
      * Within a certain radius
      */
-    static function within($lat, $lng, $radius = 1000, $query = null) {
-      // Raw
-      $rawSelect = DB::raw('(DEGREES(ACOS((SIN(RADIANS('.$lat.')) * SIN(RADIANS(lat))) + (COS(RADIANS('.$lat.')) * COS(RADIANS(lat)) * COS(RADIANS('.$lng.' - lng))))) * 60 * 1.1515 * 1.609344 * 1000) `distance`');
-      // Set query
-      $query = $query ? $query->addSelect($rawSelect) : static::addSelect($rawSelect);
+    function within($lat, $lng, $radius = 1000) {
+      // Set select
+      $select = '(degrees(acos((sin(radians('.$lat.')) * sin(radians(lat))) + (cos(radians('.$lat.')) * cos(radians(lat)) * cos(radians('.$lng.' - lng))))) * 60 * 1.1515 * 1.609344 * 1000) `distance`';
+      // Add select field
+      $this->qAddSelect($select);
+      // Having
+      $this->qHaving('`distance` <= ' . $radius);
       // Return
-      return $query->having('distance', '<=', $radius);
+      return $this;
     }
 
     /**
      * Near
      */
-    static function near($lat, $lng, $radius = 1000, $query = null) {
+    function near($lat, $lng, $radius = 1000) {
       // Just extend radius by 200 and use within
-      return static::within($lat, $lng, $radius + 1000, $query);
+      return $this->within($lat, $lng, $radius + 1000);
     }
 
     /**
      * Budget
      */
-    static function budget($range, $query = null) {
+    function budget($range) {
       // Convert to lower case
       $range = Str::lower($range);
       // Str to use to split
@@ -115,44 +109,33 @@
       // Get hi
       $hi = isset($arrRange[1]) ? intval($arrRange[1]) : 0;
 
-      // Set query
-      $query = $query ? $query : new static();
       // If there's lo
       if ($lo && $hi) {
         // Set where
-        $query->where(function($query) use ($lo, $hi) {
-          // Set both
-          $query->orWhere(function($query) use ($lo) {
-            // Use lo
-            $query->where('price_min', '<=', $lo)
-                  ->where('price_max', '>=', $lo);
-          })->orWhere(function($query) use ($hi) {
-            // Use hi
-            $query->where('price_min', '<=', $hi)
-                  ->where('price_max', '>=', $hi);
-          });
-        });
+        $this->qWhere('((`price_min` <= ' . $lo . ' and `price_max` >= ' . $lo . ') or (`price_min` <= ' . $hi . ' and `price_max` >= ' . $hi . '))');
+        // Or only one of them has value
       } elseif ($lo || $hi) {
         // Set budget
         $budget = $lo ? $lo : $hi;
         // Use budget
-        $query->where('price_min', '<=', $budget)
-              ->where('price_max', '>=', $budget);
+        $this->qWhere('(`price_min` <= ' . $budget . ' and `price_max` >= ' . $budget . ')');
       }
-      // Return query
-      return $query;
+      // Return
+      return $this;
     }
 
     /**
      * Search
      */
-    static function search($keyword, $query = null) {
-      // Set select
-      $rawSelect = DB::raw('MATCH(tags) AGAINST ("'.addslashes($keyword).'" IN BOOLEAN MODE) `relevance`');
-      // Set query
-      $query = $query ? $query->addSelect($rawSelect) : static::addSelect($rawSelect);
+    function search($keyword) {
+      // Query
+      $select = 'match(tags) against ('. $this->qQuote($keyword) .' in boolean mode) `relevance`';
+      // Add select
+      $this->qAddSelect($select);
+      // Add having
+      $this->qHaving('`relevance` > 0');
       // Return
-      return $query->having('relevance', '>', 0)->orderBy('relevance', 'desc');
+      return $this;
     }
 
     /**
@@ -160,7 +143,7 @@
      */
     function updateTags() {
       // Set tags
-      $tags = array(Str::ascii(Str::lower($this->name)));
+      $tags = explode(' ', Str::ascii(Str::lower($this->name)));
 
       // Add category tags
       $tags[] = 'restaurant';
@@ -176,7 +159,7 @@
         }
       }
       // Update tags
-      $this->tags = implode(', ', array_unique($tags));
+      $this->tags = cleanupTags(implode(', ', array_unique($tags)));
       // Save
       $this->save();
       // Return

@@ -78,4 +78,9 @@ App::down(function()
 |
 */
 
+// Add helpers
+require app_path().'/helpers.php';
+// Add filters
 require app_path().'/filters.php';
+// Add listeners
+require app_path().'/listeners.php';
