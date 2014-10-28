@@ -17,7 +17,7 @@ class AlterSentryUsers extends Migration {
 		@DB::statement('ALTER TABLE  `users` ADD  `mobile` VARCHAR( 10 ) CHARACTER SET armscii8 COLLATE armscii8_bin NOT NULL AFTER  `id` , ADD UNIQUE ( `mobile` )');
 		@DB::statement('ALTER TABLE  `users` ADD  `name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER  `last_name`');
 		@DB::statemet('ALTER TABLE  `users` ADD  `location` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER  `name`');
-		@DB::statemet('ALTER TABLE  `users` ADD  `bounds` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER  `location`')
+		@DB::statemet('ALTER TABLE  `users` ADD  `bounds` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER  `location`');
 	}
 
 	/**
