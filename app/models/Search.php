@@ -11,6 +11,19 @@
      */
     static $ignoreWords = array('and', 'the', 'for', 'in', 'on', 'at', 'of');
 
+    /** 
+     * Table
+     */
+    protected $table = 'searches';
+    /**
+     * Set fillable
+     */
+    protected $fillable = array('id', 'query', 'location', 'bounds', 'user_id');
+
+    /**
+     * Set address
+     */
+    private $address = '';
     /**
      * Results
      */
@@ -35,7 +48,7 @@
     /**
      * Properties
      */
-    static $properties = array('results', 'count', 'start', 'limit');
+    static $properties = array('address', 'results', 'count', 'start', 'limit');
 
     /**
      * Get
@@ -46,6 +59,8 @@
         // Return
         return $this->$name;
       }
+      // Return
+      return parent::__get($name);
     }
 
     /**
@@ -62,6 +77,8 @@
           return $this->$property;
         }
       }
+      // Return
+      return parent::__call($name, $args);
     }
 
     /**
@@ -75,16 +92,15 @@
     /**
      * Query
      */
-    function initialize($query, $start = 0, $limit = 5) {
+    function initialize($start = 0, $limit = 5) {
 
       // Do query
-      $keyword = parseQueryFilters($query, array(
+      $keyword = parseQueryFilters($this->query, array(
         // Near, within, and budget
         'near',
         'within',
         'budget'
       ));
-
       // Get establishment
       $establishments = array();
 
@@ -117,9 +133,13 @@
       }
 
       // Locate
-      $locate = $address ? Maps::locate($address) : array();
+      $locate = $address ? Maps::locate($address, $this->bounds ? $this->bounds() : null) : array();
+
+      // Set address
+      $this->address = $address ? $address : $this->location;
+
       // If there's locate
-      if ($locate) {
+      if ($address && $locate) {
         // Loop through locate
         foreach ($locate as $loc) {
           // Declare establishment initially
@@ -127,12 +147,32 @@
           // callback
           $callback = $useNear ? 'near' : 'within';
           // Call
-          $establishment->$callback($loc['center']['lat'], $loc['center']['lng'], $loc['radius']);
+          $establishment->$callback($loc->center->lat, $loc->center->lng, $loc->radius);
           // Add select
-          $establishment->qAddSelect($establishment->qQuote($loc['address']) . ' `from`');
+          $establishment->qAddSelect($establishment->qQuote($loc->address) . ' `from`');
           // Add
           $establishments[] = $establishment;
         }
+      }
+
+      // If there's no address
+      if (!$address) {
+        // Still filter
+        $establishment = new Establishment();
+        // Set center
+        $center = $this->center();
+        // Use within
+        $establishment->within($center->lat, $center->lng, $this->radius());
+        // Add select
+        $establishment->qAddSelect($establishment->qQuote($this->location) . ' `from`');
+        // Add to establishments
+        $establishments[] = $establishment;
+      }
+
+      // If there's address, but no locate
+      if ($address && !$locate) {
+        // Return
+        return $this;
       }
 
       // If there's still no establishments, append single
@@ -208,15 +248,64 @@
     }
 
     /**
+     * Get first
+     */
+    function getFirst() {
+      // Return
+      return isset($this->results[0]) ? $this->results[0] : null;
+    }
+
+    /**
      * Execute a search
      */
-    static function execute($query) {
+    static function execute($query, User $user = null, $start = 0, $limit = 5) {
+
       /**
        * Create a search
        */
-      $search = new static();
+      $search = static::create(array(
+        'query'   => $query,
+        'location'=> ($user && $user->location) ? $user->location : 'Philippines',
+        'bounds'  => ($user && $user->bounds) ? (string) $user->bounds : ((string) Maps::philippines()),
+        'user_id' => $user ? $user->id : 0
+      ));
+
+      // Save
+      $search->save();
       // Return with query
-      return $search->initialize($query);
+      return $search->initialize($start, $limit);
+    }
+
+    /**
+     * Get user
+     */
+    function user() {
+      // Get user
+      return User::where('id', '=', $this->user_id)->first();
+    }
+
+    /**
+     * Get bounds
+     */
+    function bounds() {
+      // Return json
+      return $this->bounds ? new Bounds($this->bounds) : false;
+    }
+
+    /**
+     * Get center
+     */
+    function center() {
+      // Return center
+      return $this->bounds ? Maps::boundsCenter($this->bounds()) : false;
+    }
+
+    /**
+     * Get radius
+     */
+    function radius() {
+      // Return radius
+      return $this->bounds ? Maps::boundsRadius($this->bounds()) : false;
     }
 
   }

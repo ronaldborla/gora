@@ -27,8 +27,8 @@
         // Instantiate smsApi
         $smsApi = new SmsApi($this->sms);
         // Call SmsApi
-        return $smsApi->receive($data) // Set received data
-                      ->test($this->isTest()) // Set if test
+        return $smsApi->test($this->isTest()) // Set if test
+                      ->receive($data) // Set received data
                       ->request(); // Send request
       }
 
@@ -63,7 +63,7 @@
 <head>
 <title>Test SMS</title>
   <style type="text/css">
-  input,textarea,button { font: 14px Arial; border: 1px #ccc solid; border-radius: 3px; padding: 4px 6px 4px 6px; } 
+  input,textarea,button { font: 14px Arial; border: 1px #ccc solid; border-radius: 3px; padding: 4px 6px 4px 6px; margin-bottom: 6px; } 
   button { cursor: pointer; }
 </style>
 </head>
@@ -72,7 +72,7 @@
   // If there's response
   if ($response) {
     // Print response
-    echo '<pre>',$response,'</pre>';
+    echo '<pre>',e($response),'</pre>';
   }
   // Create form
   echo Form::open(array('action'=> 'SmsController@test', 'method'=> 'post'));

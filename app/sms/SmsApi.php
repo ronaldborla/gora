@@ -24,6 +24,11 @@
     private $message;
 
     /**
+     * Set user
+     */
+    private $user;
+
+    /**
      * Test only
      */
     private $test = false;
@@ -85,6 +90,25 @@
     function setMobile($mobile) {
       // Set mobile
       $this->mobile = $mobile;
+
+      // Set user
+      $this->user = User::findByMobile($mobile);
+      // If not found
+      if (!$this->user || !$this->user->id) {
+        // New user
+        $password = Str::quickRandom(6);
+        // Create
+        $this->user = User::createUser(array(
+          'mobile'=> $mobile,
+          'name'=> Chikka::cleanupMobileNumber($mobile),
+          'password'=> $password
+        ));
+        // Welcome user
+        if (!$this->test) {
+          static::welcomeUser($this->sender, $this->user, $password);
+        }
+      }
+
       // Return
       return $this;
     }
@@ -125,4 +149,19 @@
       // Return
       return $this;
     }
+
+    /**
+     * Welcome user
+     */
+    static function welcomeUser(SmsSenderInterface $sender, User $user, $password = '') {
+
+      // Message
+      $message = 'Welcome ' . $user->name . ' to Gora' . PHP_EOL . PHP_EOL .
+                 'You may login with your mobile number to our website at ' . action('UsersController@login') . PHP_EOL . 
+                 ( $password ? ('Your temporary password is ' . $password . PHP_EOL) : '' ) . PHP_EOL .
+                 'Gora Team.';
+      // Send message
+      return $sender->send($user->mobile, $message);
+    }
+
   }

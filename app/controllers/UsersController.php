@@ -9,49 +9,89 @@ class UsersController extends \BaseController {
 
     public function registerUser()
     {
-        try
-        {
-            $user = Sentry::createUser(array(
-                'first_name'=> Input::get('first_name'),
-                'last_name' => Input::get('last_name'),
-                'mobile'    => Input::get('mobile'),
-                'password'  => Input::get('password'),
-                'activated' => true,
-                ));
 
-            $adminGroup = Sentry::findGroupById(3);
+        // Create user
+        $createUser = static::createUser(Input::get());
 
-            $user->addGroup($adminGroup);
+        // If there's error
+        if (!$createUser['success']) {
+            // Return
+            return View::make('users.register')->withErrors($createUser['error']);
         }
-        catch (Cartalyst\Sentry\Users\LoginRequiredException $e)
-        {
-            return View::make('users.register')->withErrors('Login field is required.');
-        }
-        catch (Cartalyst\Sentry\Users\PasswordRequiredException $e)
-        {
-            return View::make('users.register')->withErrors('Password field is required.');
-        }
-        catch (Cartalyst\Sentry\Users\UserExistsException $e)
-        {
-            return View::make('users.register')->withErrors('User with this login already exists.');
-        }
-        catch (Cartalyst\Sentry\Groups\GroupNotFoundException $e)
-        {
-            return View::make('users.register')->withErrors('Group was not found.');
-        }
-
 
         // Login credentials
         $credentials = array(
-            'mobile'    => Input::get('mobile'),
+            'mobile'    => $createUser['user']->mobile,
             'password' => Input::get('password'),
-            );
+        );
 
         // Authenticate the user
         $user = Sentry::authenticate($credentials, false);
 
         //echo Sentry::getUser()->id;
         return Redirect::to('home');
+    }
+
+    /**
+     * Create user
+     */
+    public static function createUser($user) {
+        /**
+         * Create
+         */
+        $create = array(
+            'success'=> false,
+            'error'=> '',
+            'user'=> null
+        );
+
+        if (!isset($user['first_name']) || !($user['first_name'] = trim($user['first_name']))) {
+            // Set error
+            $create['error'] = 'First name is required';
+            // Return
+            return $create;
+        }
+
+        if (!isset($user['last_name']) || !($user['last_name'] = trim($user['last_name']))) {
+            // Set error
+            $create['error'] = 'Last name is required';
+            // Return
+            return $create;
+        }
+
+        // Check if mobile is valid
+        if (Chikka::getNetwork($user['mobile']) === false) {
+            // Set error
+            $create['error'] = 'Mobile number not supported';
+            // Return
+            return $create;
+        }
+
+        // Set mobile number
+        $user['mobile'] = User::shortenMobile($user['mobile']);
+
+        if (!isset($user['password']) || !($user['password'] = trim($user['password']))) {
+            // Set error
+            $create['error'] = 'Password is required';
+            // Return
+            return $create;
+        }
+
+        try {
+            // Create
+            $create['user'] = User::createUser($user);
+            // If user already in use
+        } catch (Cartalyst\Sentry\Users\UserExistsException $e) {
+            // Already exists
+            $create['error'] = 'Mobile number is already in use';
+            // Return
+            return $create;
+        }
+
+        // Return with success
+        $create['success'] = true;
+        // Return
+        return $create;
     }
 
     /**
@@ -75,9 +115,9 @@ class UsersController extends \BaseController {
         {
         // Login credentials
             $credentials = array(
-                'mobile'    => Input::get('mobile'),
+                'mobile'    => User::shortenMobile(Input::get('mobile')),
                 'password' => Input::get('password'),
-                );
+            );
 
         // Authenticate the user
             $user = Sentry::authenticate($credentials, false);

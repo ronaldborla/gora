@@ -89,9 +89,7 @@ Route::get('clients/credits', 'ClientsController@credits');
 Route::get('clients/dashboard', 'ClientsController@dashboard');
 
 
-Route::get('home', function() {
-    return View::make('home');
-});
+Route::get('home', 'HomeController@home');
 
 Route::get('logout', function() {
     Sentry::logout();

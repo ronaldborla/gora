@@ -7,7 +7,7 @@
   class Category extends Eloquent {
 
     // User table
-    protected $table = 'category';
+    protected $table = 'categories';
 
     // Fillable
     protected $fillable = array('name', 'description', 'tags', 'parent_id');

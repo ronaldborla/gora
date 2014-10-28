@@ -7,7 +7,7 @@
   class Establishment extends Query {
 
     // User table
-    protected $table = 'establishment';
+    protected $table = 'establishments';
 
     // Fillable
     protected $fillable = array('id', 'name', 'address', 'lat', 'lng', 'price_min', 'price_max', 'tags', 'user_id', 'distance', 'from', 'relevance');

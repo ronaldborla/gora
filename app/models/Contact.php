@@ -7,7 +7,7 @@
   class Contact extends Eloquent {
 
     // User table
-    protected $table = 'contact';
+    protected $table = 'contacts';
 
     // Fillable
     protected $fillable = array('type', 'value', 'description', 'order', 'primary', 'establishment_id');

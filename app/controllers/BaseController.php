@@ -14,11 +14,19 @@ class BaseController extends Controller {
 		// Declare sms sender
 		$this->sms = new SmsSender(Config::get('sms.chikka'));
 
+		/**
+		 * Get user
+		 */
+		try {
+			// Set user
+			$this->user = Sentry::getUser();
+		} catch (Exception $ex) {
+			// If not found, do nothing
+			$this->user = null;
+		}
+
 		// Share
-		View::share(array(
-			// As current user
-			'currentUser'=> $this->user
-		));
+		View::share('currentUser', $this->user);
 	}
 
 	/**
