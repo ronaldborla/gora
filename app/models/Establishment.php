@@ -193,4 +193,12 @@
       return $allContacts;
     }
 
+    /**
+     * Make reservation
+     */
+    function makeReservation(User $user, $members = array()) {
+      // Return
+      return Reservation::make($this, $user, $members);
+    }
+
   }

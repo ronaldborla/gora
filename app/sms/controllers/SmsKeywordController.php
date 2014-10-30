@@ -15,9 +15,11 @@
      * Mapped keywords and aliases
      */
     static $keywordMap = array(
+      'back'        => array('prev', 'previous'),
       'gora'        => array(),
+      'help'        => array('?'),
       'location'    => array('loc'),
-      'more'        => array(),
+      'more'        => array('next'),
       'name'        => array(),
       'password'    => array('pwd', 'passwd'),
       'reserve'     => array('res', 'rsv'),
@@ -31,6 +33,10 @@
      * which doesn't fall into any available keyword
      */
     const DEFAULT_KEYWORD = 'search';
+    /**
+     * Pull limit
+     */
+    const PULL_LIMIT = 5;
 
     /**
      * Get
@@ -72,14 +78,25 @@
           $lines[] = ucfirst(Contact::getTypes($type)) . ': ' . implode(', ', $values);
         }
       }
+      // If there's price range
+      if ($establishment->price_min || $establishment->price_max) {
+        // Then set price
+        $line = 'Price Range: ' . number_format($establishment->price_min);
+        // If there's max
+        if ($establishment->price_max) {
+          // Add
+          $line .= ' - ' . $establishment->price_max;
+        }
+        // Add line
+        $lines[] = $line;
+      }
+
+      // Add reserve or gora
+      $lines[] = '';
+      $lines[] = 'Reply with "gora", "reserve", or "subscribe".';
 
       // Set response
       $this->response = implode("\n", $lines);
-
-      // Unsubsribe to select
-      $this->api->user->session('select')->unsubscribe();
-      // Unsubsribe to more
-      $this->api->user->session('more')->unsubscribe();
       
       // Subscribe to single
       $this->api->user->session('single')->subscribe(array(
@@ -208,6 +225,64 @@
 
       return $this;
 
+    }
+
+    /** 
+     * Get navigation
+     */
+    function getNavigation($nav) {
+      // Get more
+      $navigation = $this->api->user->session($nav);
+      // If active
+      if ($navigation->active()) {
+
+        // Get options
+        $options = $navigation->options();
+        // Unsubscribe first
+        $navigation->unsubscribe();
+
+        // If there's search
+        if (isset($options['id'])) {
+
+          // Get search
+          $search = Search::where('id', '=', intval($options['id']))->first();
+          // If there's any
+          if ($search && $search->id) {
+            // Get start
+            $start = isset($options['start']) ? intval($options['start']) : 0;
+            // Initialize
+            $search->initialize($start);
+
+            // If there's any
+            if ($search->getResults()) {
+              // Then pull multiple
+              $this->pullMultiple($search);
+
+              // Set back
+              $back = $start - static::PULL_LIMIT;
+
+              // If back is greater than 0
+              if ($back >= 0) {
+                // Add back
+                $this->api->user->session('back')->subscribe(array(
+                  'id'=> $search->id,
+                  'start'=> $back
+                ));
+              }
+            }
+
+          }
+
+        }
+
+      }
+      // If there's no response
+      if (!$this->response) {
+        // Set
+        $this->response = 'You have no pending search. Please try searching again.';
+      }
+      // Return
+      return $this;
     }
 
     /**

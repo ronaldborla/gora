@@ -6,5 +6,10 @@
 
   class SmsKeywordSubsribe extends SmsKeywordController {
 
-    
+    /**
+     * Initialize
+     */
+    function initialize() {
+
+    }
   }

@@ -22,7 +22,8 @@
 			"app/sms",
 			"app/sms/adapters",
 			"app/sms/controllers",
-			"app/sms/models"
+			"app/sms/models",
+			"app/observers"
 		]
 	},
 	"scripts": {

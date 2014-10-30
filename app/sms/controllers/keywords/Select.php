@@ -61,9 +61,7 @@
               break;
 
           }
-
-          $select->unsubscribe();
-
+          
         } else {
 
           // Invalid choice
