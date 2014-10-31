@@ -94,6 +94,7 @@ Route::get('clients/subscribers', 'ClientsController@subscribers');
 Route::get('clients/friends', 'ClientsController@friends');
 Route::get('clients/credits', 'ClientsController@credits');
 Route::get('clients/dashboard', 'ClientsController@dashboard');
+Route::get('clients/reservations', 'ClientsController@reservations');
 
 
 Route::get('home', 'HomeController@home');

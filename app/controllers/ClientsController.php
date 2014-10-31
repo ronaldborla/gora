@@ -33,7 +33,18 @@ class ClientsController extends \BaseController {
 	{
 		return View::make('clients.dashboard');
 	}
-		
+
+
+	/**
+	 * Show the form for creating a new client
+	 *
+	 * @return Response
+	 */
+	public function reservations()
+	{
+		return View::make('clients.reservations');
+	}
+
 	/**
 	 * Show the form for creating a new client
 	 *

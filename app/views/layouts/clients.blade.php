@@ -22,8 +22,8 @@
                         <span class="caret"></span>
                         </a>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="<?php print url('clients/establishment'); ?>">Mcdonalds</a></li>
-                        <li><a href="<?php print url('clients/establishment'); ?>">Dencios</a></li>
+                        <li><a href="<?php print url('clients/establishment'); ?>">Vikings</a></li>
+                        <li><a href="<?php print url('clients/establishment'); ?>">Yakimix</a></li>
                       </ul>
                       </li>
                       <li>
