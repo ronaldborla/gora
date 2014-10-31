@@ -76,7 +76,13 @@ Route::get('announcements', 'UsersController@announcements');
 // members
 Route::get('members/profile', 'MembersController@profile');
 Route::get('members/subscriptions', 'MembersController@subscriptions');
-Route::get('members/friends', 'MembersController@friends');
+
+Route::get('members/friends', 'FriendsController@index');
+Route::get('members/friends/add', 'FriendsController@create');
+Route::post('members/friends/create', 'FriendsController@store');
+
+Route::get('members/friends/{id}', 'FriendsController@destroy');
+
 
 // clients
 Route::get('clients/credits', 'ClientsController@credits');

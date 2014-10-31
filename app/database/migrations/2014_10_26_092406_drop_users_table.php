@@ -13,7 +13,9 @@ class DropUsersTable extends Migration {
 	public function up()
 	{
 		// Drop users
+		/*
 		DB::statement('DROP TABLE `user`, `user_auth`, `user_session`');
+		*/
 	}
 
 	/**
