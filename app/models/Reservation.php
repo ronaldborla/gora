@@ -14,8 +14,9 @@
 
     const PENDING = 0;
     const PROCESSED = 1;
-    const CANCELLED = 2;
-    const DELETED = 3;
+    const CANCELLING = 2;
+    const CANCELLED = 3;
+    const DELETED = 4;
 
     /**
      * Make a reservation
