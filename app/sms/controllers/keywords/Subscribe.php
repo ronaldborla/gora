@@ -4,7 +4,7 @@
    * Subscribe controller
    */
 
-  class SmsKeywordSubsribe extends SmsKeywordController {
+  class SmsKeywordSubscribe extends SmsKeywordController {
 
     /**
      * Initialize
