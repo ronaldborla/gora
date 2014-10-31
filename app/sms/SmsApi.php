@@ -101,7 +101,9 @@
         $this->user = User::createUser(array(
           'mobile'=> $mobile,
           'name'=> Chikka::cleanupMobileNumber($mobile),
-          'password'=> $password
+          'password'=> $password,
+          'location'=> '',
+          'bounds'=> ''
         ));
         // Welcome user
         if (!$this->test) {
