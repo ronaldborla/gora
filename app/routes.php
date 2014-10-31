@@ -45,6 +45,7 @@ Route::get('refresh', function() {
  * Maps
  */
 Route::get('maps', 'MapsController@home');
+Route::match(array('get','post'), 'maps/coords', 'MapsController@coords');
 
 /*
     mockup
