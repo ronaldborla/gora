@@ -171,7 +171,7 @@
     function coords() {
 
       if (Request::isMethod('post')) {
-        
+
         // Save
         $establishment = Establishment::where('id', '=', intval(Input::get('id')))->first();
 
@@ -262,7 +262,7 @@
   }
   #map {
     width: 100%;
-    height: 800px;
+    height: 600px;
   }
 </style>
 
