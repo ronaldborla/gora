@@ -35,6 +35,11 @@
       // Set activated
       $user['activated'] = true;
 
+      if (isset($user['mobile'])) {
+        // Shorten
+        $user['mobile'] = static::shortenMobile($user['mobile']);
+      }
+
       // Create user
       $createUser = Sentry::createUser($user);
       // Use member
