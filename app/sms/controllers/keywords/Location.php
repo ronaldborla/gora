@@ -13,8 +13,9 @@
 
       // If there's no args, return location
       if (!trim($this->args)) {
-        // Return response
-        $this->response = 'Your current location is ' . $this->api->user->location . '.';
+
+        $this->response = (($this->api->user->location) ? ('Your current location is ' . $this->api->user->location) : 'You have not yet set your location') . 
+                          '. To change your location, reply with "location <your address>". Example, "location metro manila".';
         // Return
         return $this;
       }

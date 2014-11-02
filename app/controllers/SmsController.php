@@ -72,7 +72,7 @@
   // If there's response
   if ($response) {
     // Print response
-    echo '<pre>',($response),'</pre>';
+    echo '<pre>',e($response),'</pre>';
   }
   // Create form
   echo Form::open(array('action'=> 'SmsController@test', 'method'=> 'post'));

@@ -131,6 +131,16 @@
     }
 
     /**
+     * Randomize
+     */
+    function qRand() {
+      // Set order
+      $this->qOrder = 'rand()';
+      // Return
+      return $this;
+    }
+
+    /**
      * Sql
      */
     function qSql() {

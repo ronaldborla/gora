@@ -11,7 +11,7 @@ Estabishment | Vikings Restaurant
 </style>
 
 @section('main-col')
-<legend>Vikings Restaurant Reservations</legend>
+<legend>Zuni Restaurant - Reservations</legend>
 <table class="table table-striped">
       <thead>
         <tr>
@@ -33,7 +33,7 @@ Estabishment | Vikings Restaurant
         <tr class="danger">
           <td>5</td>
           <td>Abz</td>
-          <td>0922s36444</td>
+          <td>09224364156</td>
           <td>30 mins ago</td>
           <td>Cancelled</td>
         </tr>
@@ -61,7 +61,7 @@ Estabishment | Vikings Restaurant
         <tr>
           <td>2</td>
           <td>Jay Edward</td>
-          <td>092221547856</td>
+          <td>09222147856</td>
           <td>1 day ago</td>
           <td>Reserved</td>
         </tr>
@@ -79,6 +79,6 @@ Estabishment | Vikings Restaurant
 
 <script>
     setTimeout(function() {
-        $('.delay').show();
+        $('.delay').show(400);
     }, 1500);
 </script>

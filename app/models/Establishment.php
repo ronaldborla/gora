@@ -201,4 +201,27 @@
       return Reservation::make($this, $user, $members);
     }
 
+    /**
+     * Pull by gora
+     */
+    static function getGora(User $user) {
+      // Pull a random restablishment
+      // Note: in the future, there should be a much more intelligent way of pulling a restaurant
+      $establishment = new Establishment();
+      // Get bounds of user
+      $bounds = $user->bounds ? $user->bounds() : Maps::philippines();
+      // Get center of bounds
+      $center = $bounds->getCenter();
+      // Pull only those within the bounds of the current user
+      $establishment->within($center->lat, $center->lng, $bounds->getRadius());
+
+      // Pull randomly
+      $establishment->qRand();
+      // Get single
+      $establishment->qLimit(0, 1);
+      // Get and return
+      return $establishment->qGet();
+
+    }
+
   }

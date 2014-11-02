@@ -13,4 +13,16 @@
       'south',
       'west'
     );
+
+    // Get center
+    function getCenter() {
+      // Return
+      return Maps::boundsCenter($this);
+    }
+
+    // Get radius
+    function getRadius() {
+      // Return
+      return Maps::boundsRadius($this);
+    }
   }
