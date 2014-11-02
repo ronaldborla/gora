@@ -85,7 +85,7 @@
         // If there's max
         if ($establishment->price_max) {
           // Add
-          $line .= ' - ' . $establishment->price_max;
+          $line .= ' - ' . number_format($establishment->price_max);
         }
         // Add line
         $lines[] = $line;
